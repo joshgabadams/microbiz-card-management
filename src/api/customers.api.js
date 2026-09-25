@@ -1,6 +1,6 @@
-import { http } from './http';
+import { issuanceStore } from '../data/issuanceMock.js';
+// Demo capability adapter; production URLs and eligibility await the API contract.
 export const customersApi = {
-  search: params => http.get('/customers/search', { params }).then(r => r.data),
-  get: customerId => http.get(`/customers/${customerId}`).then(r => r.data),
-  accounts: customerId => http.get(`/customers/${customerId}/accounts`).then(r => r.data),
+  search: async query => issuanceStore.search(query),
+  get: async customerId => issuanceStore.get(customerId),
 };

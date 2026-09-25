@@ -10,6 +10,8 @@ import ReceiveCardsPage from './pages/ReceiveCardsPage';
 import CardBatchesPage from './pages/CardBatchesPage';
 import StockOperationsPage from './pages/StockOperationsPage';
 import CustomersPage from './pages/CustomersPage';
+import CustomerDetailPage from './pages/CustomerDetailPage';
+import IssuanceHistoryPage from './pages/IssuanceHistoryPage';
 import SimplePage from './pages/SimplePage';
 
 export default function App() {
@@ -26,9 +28,9 @@ export default function App() {
         <Route path="/cards/expired" element={<CardsPage title="Expired Cards" filter="EXPIRED" />} />
         <Route path="/cards/:cardId" element={<CardDetailPage />} />
         <Route path="/issuance/new" element={<IssueCardPage />} />
-        <Route path="/issuance/history" element={<SimplePage title="Issuance History" description="Review completed and attempted card issuance activity." />} />
+        <Route path="/issuance/history" element={<IssuanceHistoryPage />} />
         <Route path="/customers" element={<CustomersPage />} />
-        <Route path="/customers/:customerId" element={<SimplePage title="Customer Profile" description="Customer account and linked-card context will be loaded from the customer API." />} />
+        <Route path="/customers/:customerId" element={<CustomerDetailPage />} />
         <Route path="/inventory" element={<InventoryPage />} />
         <Route path="/inventory/receive" element={<ReceiveCardsPage />} />
         <Route path="/inventory/batches" element={<CardBatchesPage />} />

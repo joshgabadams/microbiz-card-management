@@ -135,6 +135,24 @@ src/
 
 Source references supplied by MicroBiz are stored in `public/references/`.
 
+### Reference and component contract (updated 25 September 2026)
+
+For every frontend build, review all supplied references together:
+- `proposed-design-outlook.png`: operational desktop/mobile composition, navigation, tables, intake and issuance workflow hierarchy.
+- `mobile-ui-reference.png`: MicroBiz branding, mobile spacing, card surfaces and shortcut patterns.
+- `portal-signin-reference.png`: portal composition, blue actions, pale surfaces and card presentation.
+- `microbiz-card-layout.png` and `microbiz-card-layout.pdf`: Professional/Business card artwork and brand details.
+- `public/assets/loading-animation.png`: shared branded loading treatment.
+
+Use the operational outlook for application composition and the other references
+for their respective brand and interaction details. Product rules, accessibility
+and PAN masking still apply when sample artwork depicts different behavior.
+Reuse the Phase 01 foundation: centralized tokens in `src/styles/global.css`,
+shared UI primitives, `PageHeader`, `MetricCard`, `DataTable` and `CardVisual`.
+Extend shared components/tokens where needed instead of introducing page-specific
+visual systems. Verify affected screens against the references at desktop and
+mobile sizes before visual sign-off.
+
 Visual principles:
 - deep MicroBiz navy as the primary operational color
 - bright banking blue for primary actions/active navigation
@@ -191,31 +209,31 @@ Expected capabilities, not prescribed backend route names:
 
 ## 12. Current Implementation State
 
-Updated 24 September 2026 after Phase 02 dashboard and navigation implementation.
+Updated 25 September 2026 after the Phase 03 audit and Phase 04 frontend implementation.
 
 | Phase | Status | Evidence / remaining work |
 |---|---|---|
 | 00 | COMPLETED | Product structure, routes, journeys and constraints documented. |
 | 01 | COMPLETED | Reusable UI/data primitives, accessible responsive shell, branded card rendering and build verification. See Phase 01 for files and checks. |
 | 02 | COMPLETED | Branch-scoped mock dashboard, eight KPIs, stock health, recent issuance, status distribution, attention queue and quick actions; responsive navigation verified. |
-| 03 | PARTIALLY COMPLETED | Inventory scaffold and available-card view exist; intake, batches, transfer/reconciliation shells remain. |
-| 04 | PARTIALLY COMPLETED | Customer/issuance visual scaffolds only; working lookup and guided workflow remain. |
+| 03 | IMPLEMENTED; QA PENDING | All seven scoped features exist, including validated mock intake and transfer/reconciliation shells. Updated-reference visual alignment and browser workflow verification remain; see Phase 03 audit. |
+| 04 | COMPLETED (FRONTEND DEMO) | Customer lookup/profile, eligible accounts/cards, five-step issuance, confirmation/receipt and history. PIN setup explicitly unavailable pending API contract. Unit/build/Chromium checks pass. |
 | 05 | PARTIALLY COMPLETED | Card profile scaffold only; authorized lifecycle actions and contextual history remain. |
 | 06 | NOT STARTED | Placeholder routes only. |
 | 07 | BLOCKED | Production API/auth contracts are unavailable; shared HTTP client and initial mock query adapter exist. |
 | 08 | NOT STARTED | Phase 01/02 browser/build checks and dashboard aggregation tests passed; full release validation remains. |
 
-**Next implementation phase: Phase 03 — Inventory & Stock Intake.**
+**Next implementation phase: Phase 05 — Card Profile & Lifecycle Actions. Phase 03 browser/visual sign-off remains tracked separately.**
 
 All displayed records remain development fixtures, and the shell identifies the demo workspace. The card listing uses `useCards` and the mock `cardsApi` adapter. The dashboard uses `useDashboard` and `dashboardApi`, with aggregation isolated in `src/data/dashboardMock.js`. Its fixed snapshot date and stock thresholds are explicitly marked as demo data. Other scaffold pages still import fixtures directly; migrate them through domain queries during their respective phases. No production endpoint contract is assumed by the card adapter.
 
 ### Known follow-up issues
-- Card-detail timelines remain illustrative and need contextual event fixtures during Phase 05. Dashboard summaries now reconcile with the shared card fixture set; inventory-page KPIs still need reconciliation during Phase 03.
-- Customer and inventory API modules still contain unused provisional URL paths. Replace these with contract-driven adapters before connecting any workflow; these paths are not approved production endpoints.
+- Card-detail timelines remain illustrative and need contextual event fixtures during Phase 05. Dashboard and inventory summaries use the shared card fixture set; receipt mutations invalidate inventory, cards and dashboard queries.
+- Customer, inventory and issuance workflows use isolated mock capability adapters. Production paths, eligibility and authorization still require approved API contracts.
 - Shared HTTP error normalization still retains server payloads; sanitize it and handle authentication/authorization failures according to the real contract during Phase 07.
-- Legacy inventory tables, customer forms and issuance controls still need the new reusable foundation applied in their own phases.
+- Inventory, customer lookup/profile and issuance use the shared component foundation. Phase 04 adds the operational reference's five-step workflow with responsive verification.
 - No authenticated session or backend authorization exists. Lifecycle buttons remain disabled; PIN/CVV collection is not implemented.
 - Original reference artwork remains unchanged in `public/references`. It includes printed sample card-back data and must not be used as operational UI or shipped as public production content without asset review.
-- The workspace has no Git metadata. No commit or Git diff was possible.
+- Git metadata is present in the current workspace.
 
 When real API documentation is provided, replace fixtures feature-by-feature through the API/query layer without redesigning presentation components.

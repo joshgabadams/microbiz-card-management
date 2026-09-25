@@ -345,3 +345,33 @@ textarea.input { min-height: 120px; resize: vertical; }
   .receipt-fields, .receipt-row .receipt-fields { grid-template-columns: 1fr; }
   .receipt-footer > .btn { flex: 1; }
 }
+
+/* Phase 04: shared foundation with the operational reference's staged flow. */
+.customer-search-form { display: flex; align-items: flex-start; flex-wrap: wrap; gap: var(--space-3); }
+.customer-search-form .form-group { flex: 1 1 240px; min-width: 0; }
+.customer-search-form > .btn { margin-top: var(--space-6); }
+.customer-results { display: grid; gap: var(--space-4); }
+.customer-profile { padding: var(--space-4); border: 1px solid var(--slate-200); border-radius: var(--radius-md); }
+.customer-profile-heading { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
+.customer-profile-heading h2 { margin: 0; font-size: 1rem; }
+.customer-profile-heading p { margin: var(--space-1) 0 0; }
+.customer-profile-heading .badge { margin-left: auto; }
+.issuance-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, 340px); gap: var(--space-5); align-items: start; }
+.issuance-layout > *, .issuance-layout .form-group { min-width: 0; }
+.issuance-layout h2 { font-size: 1.125rem; color: var(--navy-950); margin-top: 0; }
+.issuance-steps { display: flex; flex-wrap: wrap; list-style: none; padding: var(--space-4); margin: 0 0 var(--space-5); gap: var(--space-3); background: var(--surface); border: 1px solid var(--slate-200); border-radius: var(--radius-md); }
+.issuance-steps li { display: flex; align-items: center; gap: var(--space-2); flex: 1 1 100px; color: var(--text-muted); font-size: var(--font-sm); }
+.issuance-steps li > span { display: grid; place-items: center; width: 28px; height: 28px; flex-shrink: 0; border-radius: 50%; border: 1px solid var(--slate-300); }
+.issuance-steps .reached > span { background: var(--info-text); color: var(--white); border-color: var(--info-text); }
+.issuance-steps [aria-current="step"] { color: var(--info-text); font-weight: 700; }
+.account-options { padding: 0; border: 0; margin: var(--space-5) 0; min-width: 0; }
+.account-options legend { font-weight: 700; margin-bottom: var(--space-3); }
+.selection-option { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-4); border: 1px solid var(--slate-300); border-radius: var(--radius-sm); margin-bottom: var(--space-3); cursor: pointer; }
+.selection-option:has(input:checked) { background: var(--info-bg); border-color: var(--info-text); }
+.selection-option:has(input:disabled) { background: var(--surface-subtle); cursor: not-allowed; }
+.selection-option input { accent-color: var(--info-text); flex-shrink: 0; }
+.selection-option span { min-width: 0; overflow-wrap: anywhere; }
+.selection-option small { display: block; margin-top: var(--space-2); color: var(--text-muted); }
+.issuance-page .info-box { line-height: 1.6; }
+@media (max-width: 1100px) { .issuance-layout { grid-template-columns: 1fr; } }
+@media (max-width: 620px) { .customer-search-form > .btn { margin-top: 0; } .issuance-steps li { flex-basis: 110px; } }
