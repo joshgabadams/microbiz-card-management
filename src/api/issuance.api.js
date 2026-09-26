@@ -1,7 +1,2 @@
-import { issuanceStore } from '../data/issuanceMock.js';
-
-export const issuanceApi = {
-  available: async (customerId, accountId) => issuanceStore.available(customerId, accountId),
-  issue: async input => issuanceStore.issue(input),
-  history: async () => issuanceStore.history(),
-};
+import { createService } from './service.js';
+export const issuanceApi = createService('issuance', {"available": "issuance.issue", "issue": "issuance.issue", "history": "issuance.read"}, () => (import.meta.env.DEV || import.meta.env.VITE_DATA_MODE === 'demo') ? import('./demo/issuance.api.js') : null);

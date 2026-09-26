@@ -1,3 +1,4 @@
+import BrandLogo from '../ui/BrandLogo';
 import { maskPan } from '../../utils/maskPan';
 
 export default function CardVisual({ card, compact = false }) {
@@ -6,7 +7,7 @@ export default function CardVisual({ card, compact = false }) {
     <div className={`card-visual ${business ? 'business' : ''}`} style={compact ? { maxWidth: 320 } : undefined}>
       <div className="card-brand">
         <span>DEBIT</span>
-        <span>MICROBIZ MFBANK</span>
+        <BrandLogo light={!business} />
       </div>
       <div className="card-chip" />
       <div className="card-pan">{maskPan(card?.pan)}</div>

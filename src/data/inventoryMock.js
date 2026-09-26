@@ -1,9 +1,10 @@
+import { activityStore } from './activityStore.js';
 import { cards } from './mockData.js';
 import { inventoryReference } from './inventoryReference.js';
 import { validateReceipt } from '../features/inventory/validateReceipt.js';
 import { maskPan } from '../utils/maskPan.js';
 
-export function createInventoryStore(records, reference = inventoryReference) {
+export function createInventoryStore(records, reference = inventoryReference, events = null) {
   const receipts = new Map();
   function list() {
     const rows = records.map(card => ({ ...card, pan: maskPan(card.pan) }));
@@ -41,9 +42,15 @@ export function createInventoryStore(records, reference = inventoryReference) {
     records.push(...additions);
     const receipt = { batch, quantity: additions.length, branch: input.branch, receivedOn: input.receivedOn, receivedBy: reference.receivedBy };
     receipts.set(input.requestId, receipt);
+    const timestamp = new Date().toISOString();
+    additions.forEach(card => events?.append({
+      id: `RECEIVED-${card.id}`, reference: batch, cardId: card.id, serial: card.serial, pan: card.pan,
+      branch: card.branch, customer: '—', action: 'RECEIVED', actor: reference.receivedBy,
+      timestamp, note: `Batch ${batch}; received on ${card.receivedOn}.`,
+    }));
     return { ...receipt };
   }
   return { list, receive };
 }
 
-export const inventoryStore = createInventoryStore(cards);
+export const inventoryStore = createInventoryStore(cards, inventoryReference, activityStore);

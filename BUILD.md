@@ -206,34 +206,36 @@ Expected capabilities, not prescribed backend route names:
 | 6 | Activity, audit, approvals | `docs/phases/PHASE-06-CONTROLS.md` |
 | 7 | API integration + auth hardening | `docs/phases/PHASE-07-INTEGRATION.md` |
 | 8 | Responsive QA + production readiness | `docs/phases/PHASE-08-RELEASE.md` |
+| 9 | Design refinement + staged intake | `docs/phases/PHASE-09-DESIGN.md` |
 
 ## 12. Current Implementation State
 
-Updated 25 September 2026 after the Phase 03 audit and Phase 04 frontend implementation.
+Updated 26 September 2026 after Phase 09 design refinement. Live backend integration remains deferred until contracts are supplied.
 
 | Phase | Status | Evidence / remaining work |
 |---|---|---|
 | 00 | COMPLETED | Product structure, routes, journeys and constraints documented. |
 | 01 | COMPLETED | Reusable UI/data primitives, accessible responsive shell, branded card rendering and build verification. See Phase 01 for files and checks. |
 | 02 | COMPLETED | Branch-scoped mock dashboard, eight KPIs, stock health, recent issuance, status distribution, attention queue and quick actions; responsive navigation verified. |
-| 03 | IMPLEMENTED; QA PENDING | All seven scoped features exist, including validated mock intake and transfer/reconciliation shells. Updated-reference visual alignment and browser workflow verification remain; see Phase 03 audit. |
+| 03 | IMPLEMENTED; FUNCTIONAL QA PASSED | Inventory/intake/batch/preview workflows pass Phase 08 Chromium checks. Four-stage intake implemented in Phase 09; brand-owner approval remains; see Phase 09. |
 | 04 | COMPLETED (FRONTEND DEMO) | Customer lookup/profile, eligible accounts/cards, five-step issuance, confirmation/receipt and history. PIN setup explicitly unavailable pending API contract. Unit/build/Chromium checks pass. |
 | 05 | PARTIALLY COMPLETED | Card profile scaffold only; authorized lifecycle actions and contextual history remain. |
-| 06 | NOT STARTED | Placeholder routes only. |
-| 07 | BLOCKED | Production API/auth contracts are unavailable; shared HTTP client and initial mock query adapter exist. |
-| 08 | NOT STARTED | Phase 01/02 browser/build checks and dashboard aggregation tests passed; full release validation remains. |
+| 06 | COMPLETED (FRONTEND DEMO) | Activity/audit routes, actor/action/reference/date filters, read-only detail, session event recording and approval queue shell. Domain/build/Chromium checks pass; see Phase 06. |
+| 07 | COMPLETED (FRONTEND); LIVE INTEGRATION DEFERRED | Environment modes, isolated adapters, sanitized HTTP errors, in-memory session UX, permission/capability guards and reference-aligned entry screen. See Phase 07 and docs/API-INTEGRATION.md. |
+| 08 | COMPLETED (FRONTEND QA); LIVE RELEASE GATES REMAIN | 27-route Chromium audit at five widths, keyboard/semantic/contrast checks, failure/retry/timeout tests, session isolation and API/demo build verification. See Phase 08 and docs/RELEASE.md. |
+| 09 | IMPLEMENTED (FRONTEND); BRAND APPROVAL OPEN | Four-stage intake, shared workflow progress and reference-based SVG branding. Browser/build coverage and visual-review limits are recorded in Phase 09. |
 
-**Next implementation phase: Phase 05 — Card Profile & Lifecycle Actions. Phase 03 browser/visual sign-off remains tracked separately.**
+**Remaining earlier-phase work: complete Phase 05 lifecycle capabilities when supported, and retain brand-owner approval as a separate task; Phase 09 implements staged intake and records desktop/mobile visual checks. Phase 06 is complete for the frontend demo; production audit and approvals remain dependent on Phase 07 contracts.**
 
-All displayed records remain development fixtures, and the shell identifies the demo workspace. The card listing uses `useCards` and the mock `cardsApi` adapter. The dashboard uses `useDashboard` and `dashboardApi`, with aggregation isolated in `src/data/dashboardMock.js`. Its fixed snapshot date and stock thresholds are explicitly marked as demo data. Other scaffold pages still import fixtures directly; migrate them through domain queries during their respective phases. No production endpoint contract is assumed by the card adapter.
+All displayed records remain development fixtures, and the shell identifies the demo workspace. The card listing uses `useCards` and the mock `cardsApi` adapter. The dashboard uses `useDashboard` and `dashboardApi`, with aggregation isolated in `src/data/dashboardMock.js`. Its fixed snapshot date and stock thresholds are explicitly marked as demo data. Record reads now use domain queries and mode-selected service adapters, including card-linked customers. No production endpoint contract is assumed by the card adapter.
 
 ### Known follow-up issues
-- Card-detail timelines remain illustrative and need contextual event fixtures during Phase 05. Dashboard and inventory summaries use the shared card fixture set; receipt mutations invalidate inventory, cards and dashboard queries.
+- Card-detail timelines now read the same event snapshots as the global activity log, including session issuance and receipts. Lifecycle mutations remain unavailable pending their capability contract. Receipt and issuance mutations also invalidate activity/audit queries.
 - Customer, inventory and issuance workflows use isolated mock capability adapters. Production paths, eligibility and authorization still require approved API contracts.
-- Shared HTTP error normalization still retains server payloads; sanitize it and handle authentication/authorization failures according to the real contract during Phase 07.
+- HTTP errors now discard server payloads and Axios metadata; session expiry and permission states are implemented. Approved transport/auth and response mappings remain the backend integration task.
 - Inventory, customer lookup/profile and issuance use the shared component foundation. Phase 04 adds the operational reference's five-step workflow with responsive verification.
-- No authenticated session or backend authorization exists. Lifecycle buttons remain disabled; PIN/CVV collection is not implemented.
-- Original reference artwork remains unchanged in `public/references`. It includes printed sample card-back data and must not be used as operational UI or shipped as public production content without asset review.
+- Explicit demo entry and frontend session/capability guards are implemented. No production identity or backend authorization is connected. Lifecycle actions require returned capabilities; PIN/CVV collection is not implemented.
+- Original reference artwork remains unchanged in `public/references`. It includes printed sample card-back data and is excluded from new builds and must not be used as operational UI. The original tracked dist predates this exclusion; deploy only fresh output.
 - Git metadata is present in the current workspace.
 
 When real API documentation is provided, replace fixtures feature-by-feature through the API/query layer without redesigning presentation components.

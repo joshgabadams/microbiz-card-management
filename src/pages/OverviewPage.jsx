@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Ban, CalendarClock, CheckCircle2, CreditCard, PackageOpen, RefreshCw, Send, Snowflake } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from '../components/layout/PermissionLink';
 import MetricCard from '../components/ui/MetricCard';
 import PageHeader from '../components/layout/PageHeader';
 import StatusBadge from '../components/ui/StatusBadge';
@@ -37,7 +37,7 @@ function DashboardLoading() {
 
 export default function OverviewPage() {
   const [branch, setBranch] = useState('');
-  const { data, isPending, isError, isFetching, refetch } = useDashboard(branch);
+  const { data, isPending, isError, error, isFetching, refetch } = useDashboard(branch);
   return <div className="page dashboard-page">
     <PageHeader title="Cards Overview" description="Monitor card inventory, issuance and lifecycle status across MicroBiz." actions={<Link className="btn btn-primary" to="/inventory/receive"><PackageOpen size={17} aria-hidden="true" /> Receive Cards</Link>} />
     <div className="dashboard-toolbar card">
@@ -45,8 +45,8 @@ export default function OverviewPage() {
       <p className="dashboard-caption" role="status">{data ? <>Demo snapshot · <time dateTime={data.reportingDate}>{formatDate(data.reportingDate)}</time><br />{data.scope} · Counts use sample records</> : 'Demo workspace · sample records only'}</p>
       <Button variant="secondary" loading={isFetching} onClick={() => refetch()}><RefreshCw size={16} aria-hidden="true" /> Refresh</Button>
     </div>
-    {isPending ? <DashboardLoading /> : isError ? <ErrorState onRetry={refetch} /> : <>
-      <section aria-label="Card summary" className="kpi-grid">{metrics.map(metric => <MetricCard key={metric.key} {...metric} value={data.metrics[metric.key].toLocaleString('en-GB')} />)}</section>
+    {isPending ? <DashboardLoading /> : isError ? <ErrorState error={error} onRetry={refetch} /> : <>
+      <section aria-label="Card summary" className="kpi-grid">{metrics.map(({ key, ...metric }) => <MetricCard key={key} {...metric} value={data.metrics[key].toLocaleString('en-GB')} />)}</section>
       <p className="dashboard-caption metric-note">Issued counts overlap current statuses. “Today” refers to the snapshot date.</p>
       <div className="dashboard-grid"><InventoryHealth rows={data.inventory} /><QuickActions /></div>
       <div className="dashboard-grid"><AttentionQueue items={data.attention} /><StatusDistribution rows={data.distribution} total={data.metrics.total} /></div>

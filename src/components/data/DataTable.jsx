@@ -1,10 +1,10 @@
 import Button from '../ui/Button';
 import { EmptyState, ErrorState, LoadingState, Skeleton } from '../ui/DataState';
 
-export default function DataTable({ label, columns, rows, rowKey = 'id', loading, error, onRetry, page = 1, pageSize = 10, total = rows.length, onPageChange }) {
+export default function DataTable({ label, columns, rows, rowKey = 'id', loading, error, onRetry, page = 1, pageSize = 10, total = rows.length, onPageChange, emptyIcon, emptyTitle, emptyDescription, emptyAction }) {
   if (loading) return <section aria-label={label} aria-busy="true"><LoadingState label={`Loading ${label.toLowerCase()}…`} /><div className="table-skeleton">{[0, 1, 2].map(key => <Skeleton key={key} />)}</div></section>;
-  if (error) return <ErrorState onRetry={onRetry} />;
-  if (!rows.length) return <EmptyState />;
+  if (error) return <ErrorState error={error} onRetry={onRetry} />;
+  if (!rows.length) return <EmptyState icon={emptyIcon} title={emptyTitle} description={emptyDescription} action={emptyAction} />;
   const pageCount = Math.max(1, Math.ceil(total / pageSize));
   const cell = (column, row) => column.render ? column.render(row) : row[column.key];
   return <>

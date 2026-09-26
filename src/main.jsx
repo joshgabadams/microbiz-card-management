@@ -3,11 +3,13 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import App from './App';
+import { retryQuery } from './api/errors.js';
 import './styles/global.css';
 
 const queryClient = new QueryClient({
   defaultOptions: {
-    queries: { staleTime: 30_000, retry: 1, refetchOnWindowFocus: false },
+    mutations: { retry: false },
+    queries: { staleTime: 30_000, retry: retryQuery, refetchOnWindowFocus: false },
   },
 });
 

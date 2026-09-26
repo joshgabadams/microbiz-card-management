@@ -1,3 +1,6 @@
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute, { PermissionRoute } from './components/layout/ProtectedRoute';
+import LoginPage from './pages/LoginPage';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import NotFoundPage from './pages/NotFoundPage';
 import AppShell from './layouts/AppShell';
@@ -12,12 +15,18 @@ import StockOperationsPage from './pages/StockOperationsPage';
 import CustomersPage from './pages/CustomersPage';
 import CustomerDetailPage from './pages/CustomerDetailPage';
 import IssuanceHistoryPage from './pages/IssuanceHistoryPage';
+import ActivityPage from './pages/ActivityPage';
+import AuditPage from './pages/AuditPage';
+import ApprovalsPage from './pages/ApprovalsPage';
 import SimplePage from './pages/SimplePage';
 
 export default function App() {
   return (
-    <Routes>
+    <AuthProvider><Routes>
+      <Route path="/login" element={<LoginPage />} />
+      <Route element={<ProtectedRoute />}>
       <Route element={<AppShell />}>
+      <Route element={<PermissionRoute />}>
         <Route index element={<Navigate to="/overview" replace />} />
         <Route path="/overview" element={<OverviewPage />} />
         <Route path="/cards" element={<CardsPage title="All Cards" filter="all" />} />
@@ -36,15 +45,17 @@ export default function App() {
         <Route path="/inventory/batches" element={<CardBatchesPage />} />
         <Route path="/inventory/transfers" element={<StockOperationsPage />} />
         <Route path="/inventory/reconciliation" element={<StockOperationsPage reconciliation />} />
-        <Route path="/activity" element={<SimplePage title="Card Activity" description="Search lifecycle events across the card estate." />} />
-        <Route path="/audit" element={<SimplePage title="Audit Trail" description="Read-only audit history for sensitive card operations." />} />
-        <Route path="/approvals" element={<SimplePage title="Approvals" description="Reserved for restricted actions requiring supervisor approval." />} />
+        <Route path="/activity" element={<ActivityPage />} />
+        <Route path="/audit" element={<AuditPage />} />
+        <Route path="/approvals" element={<ApprovalsPage />} />
         <Route path="/admin/card-products" element={<SimplePage title="Card Products" description="View card products, schemes and backend-provided configuration." />} />
         <Route path="/admin/branches" element={<SimplePage title="Branches" description="Reference branch locations used for inventory ownership." />} />
         <Route path="/admin/users" element={<SimplePage title="Users & Roles" description="Role and entitlement visibility when exposed by the authorization API." />} />
         <Route path="/settings" element={<SimplePage title="Settings" description="Application preferences and user profile settings." />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
-    </Routes>
+    </Route>
+    </Route>
+    </Routes></AuthProvider>
   );
 }

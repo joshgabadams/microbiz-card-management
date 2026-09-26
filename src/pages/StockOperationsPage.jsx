@@ -33,8 +33,8 @@ function OperationsForm({ data, reconciliation }) {
   </>;
 }
 export default function StockOperationsPage({ reconciliation = false }) {
-  const { data, isPending, isError, refetch } = useInventory();
+  const { data, isPending, isError, error, refetch } = useInventory();
   return <div className="page"><PageHeader title={reconciliation ? 'Stock Reconciliation' : 'Stock Transfers'} description={reconciliation ? 'Review expected and physical counts in a demo stock scope.' : 'Review branch stock and prepare the context for a future transfer.'} />
-    {isPending ? <LoadingState label="Loading branch stock…" /> : isError ? <ErrorState onRetry={refetch} /> : <OperationsForm key={String(reconciliation)} data={data} reconciliation={reconciliation} />}
+    {isPending ? <LoadingState label="Loading branch stock…" /> : isError ? <ErrorState error={error} onRetry={refetch} /> : <OperationsForm key={String(reconciliation)} data={data} reconciliation={reconciliation} />}
   </div>;
 }

@@ -1,3 +1,4 @@
+import { activityStore } from './activityStore.js';
 import { cards, customers } from './mockData.js';
 import { inventoryReference } from './inventoryReference.js';
 import { maskPan } from '../utils/maskPan.js';
@@ -10,7 +11,7 @@ export const customerAccounts = customers.flatMap(customer => [
   { id: `${customer.id}-restricted`, customerId: customer.id, number: `800${customer.account.slice(3)}`, type: 'Savings', status: 'INACTIVE', eligible: false, reason: 'Demo account is inactive.', products: [], branch: customer.branch },
 ]);
 
-export function createIssuanceStore(records, people, accounts, reportingDate = inventoryReference.reportingDate) {
+export function createIssuanceStore(records, people, accounts, reportingDate = inventoryReference.reportingDate, events = null) {
   const requests = new Map();
   const history = records.filter(card => card.issuedOn).map(card => ({
     id: `historical-${card.id}`, cardId: card.id, customerId: people.find(person => person.name === card.customer)?.id,
@@ -51,9 +52,14 @@ export function createIssuanceStore(records, people, accounts, reportingDate = i
     Object.assign(card, { customerId: person.id, accountId: account.id, customer: person.name, account: receipt.account, status: 'ISSUED', issuedOn: reportingDate, issuedAt: reportingDate });
     history.unshift(receipt);
     requests.set(input.requestId, { signature, receipt });
+    events?.append({
+      id: receipt.id, reference: receipt.id, cardId: card.id, serial: receipt.serial, pan: receipt.pan,
+      customer: receipt.customer, branch: receipt.branch, action: 'ISSUED', actor: 'Demo Operator',
+      timestamp: new Date().toISOString(), note: `Issued to ${receipt.account}; business date ${reportingDate}.`,
+    });
     return { ...receipt };
   }
   return { search, get, available, issue, history: () => history.map(item => ({ ...item })).sort((a, b) => b.issuedOn.localeCompare(a.issuedOn)) };
 }
 
-export const issuanceStore = createIssuanceStore(cards, customers, customerAccounts);
+export const issuanceStore = createIssuanceStore(cards, customers, customerAccounts, inventoryReference.reportingDate, activityStore);

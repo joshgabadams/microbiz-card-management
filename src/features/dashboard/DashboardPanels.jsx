@@ -1,5 +1,6 @@
+import { useAuth } from '../../context/AuthContext';
 import { ArrowRight, PackageOpen, Send, ShieldAlert, Users } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from '../../components/layout/PermissionLink';
 import StatusBadge from '../../components/ui/StatusBadge';
 import { EmptyState } from '../../components/ui/DataState';
 
@@ -11,8 +12,9 @@ const actions = [
 ];
 
 export function QuickActions() {
+  const { canVisit } = useAuth();
   return <section className="card section-card" aria-labelledby="quick-actions-title"><div className="section-title"><h2 id="quick-actions-title">Quick Actions</h2></div>
-    <div className="quick-actions">{actions.map(({ title, description, to, icon: Icon }) => <Link className="quick-action" key={to} to={to}><span className="quick-action-icon"><Icon size={18} aria-hidden="true" /></span><span>{title}<small>{description}</small></span><ArrowRight className="action-arrow" size={16} aria-hidden="true" /></Link>)}</div>
+    <div className="quick-actions">{actions.filter(action => canVisit(action.to)).map(({ title, description, to, icon: Icon }) => <Link className="quick-action" key={to} to={to}><span className="quick-action-icon"><Icon size={18} aria-hidden="true" /></span><span>{title}<small>{description}</small></span><ArrowRight className="action-arrow" size={16} aria-hidden="true" /></Link>)}</div>
     <p className="dashboard-caption">Demo destinations are available; operational workflows are still being built.</p>
   </section>;
 }

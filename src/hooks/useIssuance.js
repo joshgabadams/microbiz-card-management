@@ -12,9 +12,9 @@ export function useIssuableCards(customerId, accountId) {
   return useQuery({ queryKey: ['cards', 'issuable', customerId, accountId], queryFn: () => issuanceApi.available(customerId, accountId), enabled: Boolean(customerId && accountId) });
 }
 export function useIssuanceHistory() {
-  return useQuery({ queryKey: ['issuance', 'history'], queryFn: issuanceApi.history });
+  return useQuery({ queryKey: ['issuance', 'history'], queryFn: () => issuanceApi.history() });
 }
 export function useIssueCard() {
   const client = useQueryClient();
-  return useMutation({ mutationFn: issuanceApi.issue, retry: false, onSuccess: () => Promise.all(['cards', 'inventory', 'dashboard', 'customers', 'issuance'].map(key => client.invalidateQueries({ queryKey: [key] }))) });
+  return useMutation({ mutationFn: input => issuanceApi.issue(input), retry: false, onSuccess: () => Promise.all(['cards', 'card', 'inventory', 'dashboard', 'customers', 'issuance', 'activity', 'audit'].map(key => client.invalidateQueries({ queryKey: [key] }))) });
 }

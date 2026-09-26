@@ -1,5 +1,5 @@
 import { PackageOpen } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from '../components/layout/PermissionLink';
 import PageHeader from '../components/layout/PageHeader';
 import MetricCard from '../components/ui/MetricCard';
 import { ErrorState, LoadingState } from '../components/ui/DataState';
@@ -7,10 +7,10 @@ import { useInventory } from '../hooks/useInventory';
 import StockTable from '../features/inventory/StockTable';
 
 export default function InventoryPage({ availableOnly = false }) {
-  const { data, isPending, isError, refetch } = useInventory();
+  const { data, isPending, isError, error, refetch } = useInventory();
   return <div className="page"><PageHeader title={availableOnly ? 'Available Cards' : 'Card Inventory'} description="Track card stock by serial, masked PAN, product, batch and branch." actions={<><Link className="btn btn-secondary" to="/inventory/batches">Card Batches</Link><Link className="btn btn-primary" to="/inventory/receive"><PackageOpen size={17} /> Receive Cards</Link></>} />
     <p className="info-box">Demo stock only. Received cards remain in this tab’s memory and reset when the page is reloaded.</p>
-    {isPending ? <LoadingState label="Loading inventory…" /> : isError ? <ErrorState onRetry={refetch} /> : <>
+    {isPending ? <LoadingState label="Loading inventory…" /> : isError ? <ErrorState error={error} onRetry={refetch} /> : <>
       <div className="kpi-grid">
         <MetricCard label="Tracked Cards" value={data.cards.length} caption="All statuses, including previously issued" />
         <MetricCard label="Available Stock" value={data.cards.filter(card => card.status === 'AVAILABLE').length} caption="Cards ready for issuance" />

@@ -1,5 +1,5 @@
 // Shared input validation only. These demo limits are not bank policy.
-export function validateReceipt(input, reference, existingCards = []) {
+export function validateBatchDetails(input, reference, existingCards = []) {
   const errors = {};
   const clean = value => String(value ?? '').trim();
   const batch = clean(input.batch).toUpperCase();
@@ -11,9 +11,17 @@ export function validateReceipt(input, reference, existingCards = []) {
   const date = clean(input.receivedOn);
   const parsed = new Date(`${date}T00:00:00Z`);
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !Number.isFinite(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== date || date > reference.reportingDate) errors.receivedOn = 'Enter a valid date on or before the demo snapshot date.';
-  const rows = Array.isArray(input.cards) ? input.cards : [];
   const quantity = Number(input.quantity);
-  if (!Number.isInteger(quantity) || quantity < 1 || quantity > reference.maxManualCards || rows.length !== quantity) errors.quantity = `Quantity must match the card rows (1–${reference.maxManualCards}).`;
+  if (!Number.isInteger(quantity) || quantity < 1 || quantity > reference.maxManualCards) errors.quantity = `Enter a quantity from 1 to ${reference.maxManualCards}.`;
+  return errors;
+}
+
+export function validateReceipt(input, reference, existingCards = []) {
+  const errors = validateBatchDetails(input, reference, existingCards);
+  const clean = value => String(value ?? '').trim();
+  const date = clean(input.receivedOn);
+  const rows = Array.isArray(input.cards) ? input.cards : [];
+  if (!errors.quantity && rows.length !== Number(input.quantity)) errors.quantity = `Quantity must match the card rows (1–${reference.maxManualCards}).`;
   const serials = new Set(existingCards.map(card => card.serial.toUpperCase()));
   rows.forEach((row, index) => {
     const serial = clean(row.serial).toUpperCase();

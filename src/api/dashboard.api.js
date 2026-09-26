@@ -1,6 +1,2 @@
-import { buildDashboardSnapshot, dashboardFixture } from '../data/dashboardMock.js';
-
-// Capability adapter: no production URL is assumed. Replace after contract review.
-export const dashboardApi = {
-  getSummary: async ({ branch = '' } = {}) => buildDashboardSnapshot(dashboardFixture, branch),
-};
+import { createService } from './service.js';
+export const dashboardApi = createService('dashboard', {"getSummary": "dashboard.read"}, () => (import.meta.env.DEV || import.meta.env.VITE_DATA_MODE === 'demo') ? import('./demo/dashboard.api.js') : null);

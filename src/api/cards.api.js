@@ -1,17 +1,2 @@
-import { cards } from '../data/mockData';
-
-// Development adapter only. Replace capabilities after receiving the API contract.
-const unavailable = async () => { throw new Error('This operation is not available yet.'); };
-export const cardsApi = {
-  list: async () => cards.map(card => ({ ...card })),
-  get: async cardId => {
-    const card = cards.find(item => item.id === cardId);
-    return card ? { ...card } : null;
-  },
-  available: async () => cards.filter(card => card.status === 'AVAILABLE').map(card => ({ ...card })),
-  issue: unavailable,
-  freeze: unavailable,
-  unfreeze: unavailable,
-  block: unavailable,
-  unlink: unavailable,
-};
+import { createService } from './service.js';
+export const cardsApi = createService('cards', {"list": "cards.read", "get": "cards.read", "getDetail": "cards.read", "available": "cards.read", "issue": "issuance.issue", "freeze": "cards.freeze", "unfreeze": "cards.unfreeze", "block": "cards.block", "unlink": "cards.unlink", "reassign": "cards.reassign"}, () => (import.meta.env.DEV || import.meta.env.VITE_DATA_MODE === 'demo') ? import('./demo/cards.api.js') : null);

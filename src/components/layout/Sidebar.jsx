@@ -1,3 +1,5 @@
+import BrandLogo from '../ui/BrandLogo';
+import { useAuth } from '../../context/AuthContext';
 import { useId, useState } from 'react';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
@@ -15,9 +17,11 @@ function Group({ item, onNavigate }) {
   </div>;
 }
 export default function Sidebar({ onNavigate, mobile = false }) {
+  const { canVisit } = useAuth();
+  const visibleNavigation = navigation.map(item => item.children ? { ...item, children: item.children.filter(child => canVisit(child.to)) } : item).filter(item => item.children ? item.children.length : canVisit(item.to));
   return <aside className={`sidebar ${mobile ? 'sidebar-mobile' : 'sidebar-desktop'}`}>
-    <div className="brand"><div className="brand-mark">M</div><div><strong>MICROBIZ CARDS</strong><small>Card Operations</small></div></div>
-    <nav aria-label="Main navigation">{navigation.map(item => item.children ? <Group key={item.label} item={item} onNavigate={onNavigate} /> : <NavLink end key={item.to} to={item.to} onClick={onNavigate} className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}><item.icon size={17} />{item.label}</NavLink>)}</nav>
+    <div className="brand"><BrandLogo light /><small>Card Operations</small></div>
+    <nav aria-label="Main navigation">{visibleNavigation.map(item => item.children ? <Group key={item.label} item={item} onNavigate={onNavigate} /> : <NavLink end key={item.to} to={item.to} onClick={onNavigate} className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}><item.icon size={17} />{item.label}</NavLink>)}</nav>
     <div className="sidebar-footer">MicroBiz Microfinance Bank<br />Card Operations</div>
   </aside>;
 }

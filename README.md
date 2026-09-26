@@ -31,3 +31,25 @@ in memory; reloading resets it. PIN setup and production APIs are not connected.
 
 Run `npm test` for domain tests. See `docs/phases/PHASE-04-ISSUANCE.md` for the
 implemented scope and optional Chromium browser checks.
+
+## Phase 07 frontend
+
+Open the app and choose **Enter demo workspace**. Reloading or **End demo** resets
+the in-memory session and sample operations. No staff credentials are needed.
+
+Production builds default to API mode and keep staff access closed until an
+approved adapter is connected. For a demonstration build, use
+`VITE_DATA_MODE=demo npm run build`. See `.env.example` and
+[the integration handoff](docs/API-INTEGRATION.md) for configuration and remaining
+backend work. Design reference sheets are excluded from new build output.
+
+## Phase 08 release checks
+
+`npm run verify:release` runs the domain suite and verifies API/demo builds,
+asset isolation and configuration validation in temporary output folders.
+With Vite running and Playwright available, run
+`PLAYWRIGHT_MODULE=/path/to/playwright npm run test:browser` for the Chromium
+workflow, responsive, keyboard, session and failure-state suites.
+
+See [release handoff](docs/RELEASE.md) for build/hosting instructions and remaining
+backend, cross-browser and manual accessibility sign-off.

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { CreditCard } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from '../components/layout/PermissionLink';
 import { useCards } from '../hooks/useCards';
 import StatusBadge from '../components/ui/StatusBadge';
 import PageHeader from '../components/layout/PageHeader';
@@ -17,7 +17,7 @@ const columns = [
   { key: 'action', label: 'Action', render: card => <Link className="text-link" to={`/cards/${card.id}`} aria-label={`View card ${card.serial}`}>View card</Link> },
 ];
 export default function CardsPage({ title, filter }) {
-  const { data: cards = [], isPending, isError, refetch } = useCards();
+  const { data: cards = [], isPending, isError, error, refetch } = useCards();
   const products = [...new Set(cards.map(card => card.product))];
   const branches = [...new Set(cards.map(card => card.branch))];
   const [search, setSearch] = useState('');
@@ -35,6 +35,6 @@ export default function CardsPage({ title, filter }) {
       <FormField label="Search cards" type="search" value={search} onChange={change(setSearch)} placeholder="Serial, last four digits or customer" />
       <FormField label="Product" as="select" value={product} onChange={change(setProduct)}><option value="">All products</option>{products.map(value => <option key={value}>{value}</option>)}</FormField>
       <FormField label="Branch" as="select" value={branch} onChange={change(setBranch)}><option value="">All branches</option>{branches.map(value => <option key={value}>{value}</option>)}</FormField>
-    </div><DataTable loading={isPending} error={isError} onRetry={refetch} label={title} columns={columns} rows={rows.slice((currentPage - 1) * pageSize, currentPage * pageSize)} total={rows.length} page={currentPage} pageSize={pageSize} onPageChange={setPage} /></section>
+    </div><DataTable loading={isPending} error={isError ? error : null} onRetry={refetch} label={title} columns={columns} rows={rows.slice((currentPage - 1) * pageSize, currentPage * pageSize)} total={rows.length} page={currentPage} pageSize={pageSize} onPageChange={setPage} /></section>
   </div>;
 }

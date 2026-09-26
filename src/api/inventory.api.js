@@ -1,7 +1,2 @@
-import { inventoryStore } from '../data/inventoryMock.js';
-
-// Mock capability adapter. No production endpoint paths are assumed.
-export const inventoryApi = {
-  list: async () => inventoryStore.list(),
-  receive: async payload => inventoryStore.receive(payload),
-};
+import { createService } from './service.js';
+export const inventoryApi = createService('inventory', {"list": "inventory.read", "receive": "inventory.receive"}, () => (import.meta.env.DEV || import.meta.env.VITE_DATA_MODE === 'demo') ? import('./demo/inventory.api.js') : null);

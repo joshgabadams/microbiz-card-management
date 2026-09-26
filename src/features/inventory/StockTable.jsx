@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import Link from '../../components/layout/PermissionLink';
 import DataTable from '../../components/data/DataTable';
 import FormField from '../../components/ui/FormField';
 import Button from '../../components/ui/Button';
