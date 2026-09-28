@@ -1,0 +1,2 @@
+import { createService } from './service.js';
+export const cardsApi = createService('cards', {"list": "cards.read", "get": "cards.read", "getDetail": "cards.read", "available": "cards.read", "issue": "issuance.issue", "activate": "cards.activate", "freeze": "cards.freeze", "unfreeze": "cards.unfreeze", "block": "cards.block", "unlink": "cards.unlink", "reassign": "cards.reassign"}, () => (import.meta.env.DEV || import.meta.env.VITE_DATA_MODE === 'demo') ? import('./demo/cards.api.js') : null);
