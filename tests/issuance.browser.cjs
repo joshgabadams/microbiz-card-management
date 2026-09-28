@@ -28,7 +28,7 @@ if (output) fs.mkdirSync(output, { recursive: true });
     const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
     page.on('pageerror', error => errors.push(error.message));
     await page.goto(base + '/customers');
-    await page.getByRole('button', { name: 'Enter demo workspace', exact: true }).click();
+    await page.getByRole('button', { name: 'Sign in', exact: true }).click();
     await page.getByRole('button', { name: 'Search', exact: true }).click();
     await page.getByText('Enter at least two characters.').waitFor();
     await page.getByLabel('Find customer').fill('nobody');
@@ -75,7 +75,7 @@ if (output) fs.mkdirSync(output, { recursive: true });
     for (const width of [320, 390, 768]) {
       await page.setViewportSize({ width, height: 900 });
       await page.goto(base + '/issuance/new?customer=CUS-10044');
-    await page.getByRole('button', { name: 'Enter demo workspace', exact: true }).click();
+    await page.getByRole('button', { name: 'Sign in', exact: true }).click();
       await goToReview(page);
       await noOverflow(page);
       await screenshot(page, 'phase04-review-' + width);
@@ -89,7 +89,7 @@ if (output) fs.mkdirSync(output, { recursive: true });
       await noOverflow(page);
     }
     await page.goto(base + '/issuance/new?customer=CUS-10021');
-    await page.getByRole('button', { name: 'Enter demo workspace', exact: true }).click();
+    await page.getByRole('button', { name: 'Sign in', exact: true }).click();
     await page.getByRole('radio', { name: /Savings.*7891 Professional/ }).check();
     await page.getByRole('button', { name: 'Continue to card', exact: true }).click();
     await page.getByRole('heading', { name: 'No eligible cards available' }).waitFor();
@@ -98,11 +98,11 @@ if (output) fs.mkdirSync(output, { recursive: true });
     await page.getByRole('button', { name: 'Discard selection', exact: true }).click();
     await page.getByLabel('Find customer').waitFor();
     await page.goto(base + '/customers/unknown');
-    await page.getByRole('button', { name: 'Enter demo workspace', exact: true }).click();
+    await page.getByRole('button', { name: 'Sign in', exact: true }).click();
     await page.getByRole('heading', { name: 'Customer not found', exact: true }).waitFor();
     // A card consumed after review must not issue again; recovery remains usable.
     await page.goto(base + '/issuance/new?customer=CUS-10044');
-    await page.getByRole('button', { name: 'Enter demo workspace', exact: true }).click();
+    await page.getByRole('button', { name: 'Sign in', exact: true }).click();
     await goToReview(page);
     await page.evaluate(async () => {
       const { cards } = await import('/src/data/mockData.js');

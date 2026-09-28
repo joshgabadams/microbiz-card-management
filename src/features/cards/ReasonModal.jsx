@@ -3,6 +3,7 @@ import { ConfirmationModal } from '../../components/ui/Modal';
 import FormField from '../../components/ui/FormField';
 
 const ACTION_LABELS = {
+  activate: { title: 'Activate Card', confirm: 'Activate Card', danger: false },
   freeze:   { title: 'Freeze Card',   confirm: 'Freeze Card',   danger: false },
   unfreeze: { title: 'Unfreeze Card', confirm: 'Unfreeze Card', danger: false },
   block:    { title: 'Block Card',    confirm: 'Block Card',    danger: true  },

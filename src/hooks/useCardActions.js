@@ -6,7 +6,7 @@ import { cardsApi } from '../api/cards.api';
  * Each mutation invalidates both the card detail and the card list queries on settle.
  *
  * @param {string} cardId
- * @returns {{ freeze, unfreeze, block, unlink, reassign }} — each is a useMutation result
+ * @returns {{ activate, freeze, unfreeze, block, unlink, reassign }} — each is a useMutation result
  */
 export function useCardActions(cardId) {
   const queryClient = useQueryClient();
@@ -19,6 +19,11 @@ export function useCardActions(cardId) {
       },
     };
   }
+
+  const activate = useMutation({
+    mutationFn: reason => cardsApi.activate(cardId, reason),
+    ...makeInvalidator(),
+  });
 
   const freeze = useMutation({
     mutationFn: reason => cardsApi.freeze(cardId, reason),
@@ -45,5 +50,5 @@ export function useCardActions(cardId) {
     ...makeInvalidator(),
   });
 
-  return { freeze, unfreeze, block, unlink, reassign };
+  return { activate, freeze, unfreeze, block, unlink, reassign };
 }

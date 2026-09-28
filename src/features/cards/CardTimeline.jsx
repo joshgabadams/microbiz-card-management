@@ -1,3 +1,4 @@
+import EventBadge from '../../components/ui/EventBadge';
 import { Clock } from 'lucide-react';
 import { EmptyState } from '../../components/ui/DataState';
 
@@ -25,7 +26,7 @@ export default function CardTimeline({ events = [] }) {
             <span className="card-timeline-line" aria-hidden="true" />
           )}
           <div className="card-timeline-content">
-            <strong>{item.event}</strong>
+            <EventBadge action={item.event} />
             {item.note && <p className="card-timeline-note">{item.note}</p>}
             <span className="card-timeline-meta">
               {item.actor} · {item.timestamp}

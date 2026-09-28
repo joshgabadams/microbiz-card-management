@@ -34,7 +34,7 @@ implemented scope and optional Chromium browser checks.
 
 ## Phase 07 frontend
 
-Open the app and choose **Enter demo workspace**. Reloading or **End demo** resets
+Open the app and choose **Sign in**. Reloading or **Sign out** resets
 the in-memory session and sample operations. No staff credentials are needed.
 
 Production builds default to API mode and keep staff access closed until an

@@ -22,6 +22,7 @@ export const cardsApi = {
   },
   available: async () => cards.filter(card => card.status === 'AVAILABLE').map(card => ({ ...card })),
   issue:     async () => unavailable('Issue'),
+  activate:  async (_cardId, _reason) => unavailable('Activate'),
   freeze:    async (_cardId, _reason) => unavailable('Freeze'),
   unfreeze:  async (_cardId, _reason) => unavailable('Unfreeze'),
   block:     async (_cardId, _reason) => unavailable('Block'),

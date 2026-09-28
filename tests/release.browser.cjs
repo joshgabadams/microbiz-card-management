@@ -57,7 +57,7 @@ const routes = ['/overview', '/cards', '/cards/available', '/cards/issued', '/ca
       assert.deepEqual(problems, [], path);
     };
     await page.goto(base + '/overview');
-    await page.getByRole('button', { name: 'Enter demo workspace' }).click();
+    await page.getByRole('button', { name: 'Sign in' }).click();
     await page.getByRole('heading', { name: 'Cards Overview', exact: true }).waitFor();
     for (const width of [320, 390, 768, 1024, 1440]) {
       await page.setViewportSize({ width, height: 1000 });

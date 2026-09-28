@@ -38,7 +38,7 @@ live service was supplied or deployed in this phase.
 
 Approved backend contracts and staging checks; Firefox and Safari/WebKit;
 physical-device checks; manual screen-reader and artwork/gradient accessibility
-review; brand-owner approval of the reference-based SVG wordmark. Phase 09 implements
+review; brand review of the supplied logo in its application layouts. Phase 09 implements
 and checks the four-stage intake layout. See Phases 08 and 09 for the exact
 implemented coverage. Transfers, reconciliation, approvals and administration
 remain honest preview/unavailable states where services are not connected.

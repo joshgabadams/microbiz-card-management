@@ -15,7 +15,7 @@ const output = process.env.QA_OUTPUT;
     });
     if (output) fs.mkdirSync(output, { recursive: true });
     const screenshot = async name => { if (output) await page.screenshot({ path: `${output}/${name}.png`, fullPage: true }); };
-    const enter = () => page.getByRole('button', { name: 'Enter demo workspace', exact: true }).click();
+    const enter = () => page.getByRole('button', { name: 'Sign in', exact: true }).click();
     const navigate = async path => page.evaluate(path => { history.pushState({}, '', path); dispatchEvent(new PopStateEvent('popstate')); }, path);
     const setSession = async permissions => page.evaluate(async permissions => {
       const { sessionStore, normalizeSession } = await import('/src/services/session.js');
@@ -25,7 +25,7 @@ const output = process.env.QA_OUTPUT;
       await page.goto(base + '/cards/MBZ-001');
       await page.getByRole('heading', { name: /Welcome to/ }).waitFor();
       assert(await page.getByRole('button', { name: 'Staff sign-in unavailable' }).isDisabled());
-      assert.equal(await page.getByRole('button', { name: 'Enter demo workspace' }).count(), 0);
+      assert.equal(await page.getByRole('button', { name: 'Sign in' }).count(), 0);
       assert.equal(await page.locator('.app-shell').count(), 0);
       await screenshot('production-closed');
       assert.deepEqual(errors, []);
@@ -44,10 +44,24 @@ const output = process.env.QA_OUTPUT;
     }
     await enter();
     await page.getByRole('heading', { name: 'Card Profile', exact: true }).waitFor();
-    assert.equal(await page.getByRole('button', { name: 'Freeze this card', exact: true }).count(), 0);
+    assert(await page.getByRole('button', { name: 'Freeze this card', exact: true }).isDisabled());
     await page.getByRole('tab', { name: 'Customer', exact: true }).click();
     await page.getByRole('link', { name: 'View Full Profile' }).waitFor();
     assert(!(await page.locator('.card-tab-panel').innerText()).includes('234567891'));
+    assert.equal(await page.locator('.topbar').getByText(/Demo workspace|Demo Operator|End demo/).count(), 0);
+    assert.equal(await page.getByRole('button', { name: 'Sign out', exact: true }).locator('svg').count(), 1);
+    for (const name of ['Activate this card', 'Freeze this card', 'Unfreeze this card', 'Block and hotlist this card', 'Unlink card from customer account', 'Reassign or replace this card']) {
+      assert(await page.getByRole('button', { name, exact: true }).isDisabled());
+    }
+    await page.getByRole('tab', { name: 'Activity', exact: true }).click();
+    await page.locator('.card-timeline-item').first().waitFor();
+    assert.equal(await page.locator('.card-timeline').evaluate(node => getComputedStyle(node).listStyleType), 'none');
+    assert.equal(await page.locator('.card-timeline-item').first().evaluate(node => getComputedStyle(node).display), 'grid');
+    for (const width of [320, 390, 768, 1440]) {
+      await page.setViewportSize({ width, height: 1000 });
+      assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+      await screenshot(`profile-activity-${width}`);
+    }
     await setSession(['cards.read']);
     await page.getByRole('heading', { name: 'Card Profile', exact: true }).waitFor();
     assert.equal(await page.getByRole('navigation', { name: 'Main navigation', exact: true }).getByRole('link', { name: 'Audit Trail' }).count(), 0);
@@ -70,7 +84,7 @@ const output = process.env.QA_OUTPUT;
       assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
       if (width === 390) await screenshot('session-mobile');
     }
-    await page.getByRole('button', { name: 'End demo', exact: true }).click();
+    await page.getByRole('button', { name: 'Sign out', exact: true }).click();
     await page.getByRole('heading', { name: /Welcome to/ }).waitFor();
     await page.reload();
     await page.getByRole('heading', { name: /Welcome to/ }).waitFor();

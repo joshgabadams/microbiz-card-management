@@ -20,7 +20,7 @@ if (output) fs.mkdirSync(output, { recursive: true });
     const noOverflow = async () => assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'document overflow');
     const screenshot = async name => { if (output) await page.screenshot({ path: path.join(output, name + '.png'), fullPage: !name.includes('detail') }); };
     await page.goto(base + '/activity');
-    await page.getByRole('button', { name: 'Enter demo workspace', exact: true }).click();
+    await page.getByRole('button', { name: 'Sign in', exact: true }).click();
     await count(10);
     await page.getByRole('button', { name: 'Next', exact: true }).click(); await count(4);
     await page.getByLabel('Reference', { exact: true }).fill('EVT-003'); await count(1);
@@ -98,7 +98,7 @@ if (output) fs.mkdirSync(output, { recursive: true });
       await page.setViewportSize({ width, height: 950 });
       for (const route of ['activity', 'audit', 'approvals']) {
         await page.goto(base + '/' + route);
-    await page.getByRole('button', { name: 'Enter demo workspace', exact: true }).click();
+    await page.getByRole('button', { name: 'Sign in', exact: true }).click();
         if (route === 'approvals') await page.getByRole('heading', { name: 'Approval queue is not connected' }).waitFor();
         else await page.getByRole('button', { name: 'Next', exact: true }).waitFor();
         await noOverflow();
@@ -128,7 +128,7 @@ if (output) fs.mkdirSync(output, { recursive: true });
     await page.addInitScript(() => { window.__failEvents = true; window.__failOptions = false; });
     for (const route of ['activity', 'audit']) {
       await page.goto(base + '/' + route);
-    await page.getByRole('button', { name: 'Enter demo workspace', exact: true }).click();
+    await page.getByRole('button', { name: 'Sign in', exact: true }).click();
       await page.getByRole('status').filter({ hasText: /Loading .*events/ }).waitFor();
       await page.getByRole('heading', { name: 'Unable to load records' }).waitFor();
       await page.evaluate(() => { window.__failEvents = false; window.__emptyEvents = true; });

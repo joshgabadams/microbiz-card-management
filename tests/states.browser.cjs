@@ -28,7 +28,7 @@ const base = process.env.QA_BASE_URL || 'http://127.0.0.1:5173';
     const open = async mode => {
       await page.goto(base + '/inventory');
       await page.evaluate(mode => { window.__mode = mode; window.__reads = 0; }, mode);
-      await page.getByRole('button', { name: 'Enter demo workspace' }).click();
+      await page.getByRole('button', { name: 'Sign in' }).click();
       await page.getByRole('status').filter({ hasText: 'Loading inventory' }).waitFor();
     };
     await open('network');
@@ -46,7 +46,7 @@ const base = process.env.QA_BASE_URL || 'http://127.0.0.1:5173';
       await page.getByRole('heading', { name: heading, exact: true }).waitFor();
       assert.equal(await page.evaluate(() => window.__reads), 1);
       assert.equal(await page.getByRole('button', { name: 'Try again' }).count(), 0);
-      assert.equal(await page.getByRole('button', { name: 'End demo' }).count(), 1);
+      assert.equal(await page.getByRole('button', { name: 'Sign out' }).count(), 1);
     }
     // Real browser HTTP adapter: timeout, no mutation replay, 403 and 401 behavior.
     await open('ok');
@@ -73,7 +73,7 @@ const base = process.env.QA_BASE_URL || 'http://127.0.0.1:5173';
     });
     assert.equal(forbidden.code, 'FORBIDDEN');
     assert(!forbidden.message.includes('DO-NOT-EXPOSE'));
-    assert.equal(await page.getByRole('button', { name: 'End demo' }).count(), 1);
+    assert.equal(await page.getByRole('button', { name: 'Sign out' }).count(), 1);
     await page.route('**/qa-http/expired', route => route.fulfill({ status: 401, json: { message: 'DO-NOT-EXPOSE-SERVER-TOKEN' } }));
     await page.evaluate(async () => {
       const { createHttpClient } = await import('/src/api/http.js');

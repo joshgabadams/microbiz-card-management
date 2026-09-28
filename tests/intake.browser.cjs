@@ -43,7 +43,7 @@ const output = process.env.QA_OUTPUT;
     await shot('brand-login-1440');
     await page.setViewportSize({ width: 390, height: 844 });
     await shot('brand-login-390');
-    await page.getByRole('button', { name: 'Enter demo workspace' }).click();
+    await page.getByRole('button', { name: 'Sign in' }).click();
     await page.getByLabel('Batch reference').waitFor();
     await responsive('batch');
     assert.equal(await page.getByLabel('Serial number').count(), 0);

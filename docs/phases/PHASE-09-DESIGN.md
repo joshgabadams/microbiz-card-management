@@ -63,3 +63,13 @@ vector logo export. Brand-owner approval or replacement with an official vector
 asset remains open. The staged layout now follows the reference's four steps;
 exact pixel parity with the composite reference is not claimed. Existing
 cross-browser, manual accessibility and production integration gates still apply.
+
+## Supplied logo update — 26 September 2026
+
+The user supplied `public/assets/image.png` as the replacement brand logo.
+`BrandLogo` now renders that original image across login, desktop/mobile navigation
+and card previews; the hand-built SVG has been removed. The image keeps its
+956 × 285 proportions, responsive width and original colors. Dark surfaces use
+a white backing for legibility. Vite imports the asset into production output.
+This supersedes the earlier request to replace the interpreted wordmark with an
+original asset; the remaining release and accessibility reviews still apply.

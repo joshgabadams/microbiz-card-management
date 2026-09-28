@@ -198,6 +198,7 @@ export default function CardDetailPage() {
       </div>
 
       <ReasonModal
+        key={activeAction ?? 'closed'}
         open={Boolean(activeAction)}
         actionKey={activeAction}
         onClose={handleModalClose}
